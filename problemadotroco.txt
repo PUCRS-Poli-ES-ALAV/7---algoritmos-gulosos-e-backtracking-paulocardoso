@@ -1,0 +1,51 @@
+Assinatura:
+troco_guloso(moedas: List[int], valor: int) → (Dict[int, int], int)
+    • moedas: lista de valores de moedas disponíveis
+    • valor: valor total de troco desejado
+    • retorna:
+        – dicionário mapeando cada valor de moeda à quantidade usada
+        – número de iterações (operações de seleção de moeda)
+
+Algoritmo (abordagem gulosa):
+1. Ordene a lista de moedas em ordem decrescente.
+2. Inicialize um dicionário troco[v] = 0 para cada valor v em moedas.
+3. Iterações ← 0
+4. Para cada moeda m em moedas_ordenadas:
+       Enquanto valor ≥ m:
+           valor ← valor − m
+           troco[m] ← troco[m] + 1
+           Iterações ← Iterações + 1
+5. Retorne (troco, Iterações)
+
+Contagem de iterações = número total de moedas selecionadas.
+
+Casos de teste:
+
+1) moedas = [100, 25, 10, 5, 1], valor = 289  
+   moedas_ordenadas = [100, 25, 10, 5, 1]  
+   Seleções: 100×2 (→189), 25×3 (→114), 10×1 (→104), 5×0, 1×4 (→100→99→98→97… até 0)  
+   Troco = {100:2, 25:3, 10:1, 5:0, 1:4}  
+   Iterações = 2 + 3 + 1 + 0 + 4 = 10
+
+2) moedas = [50, 20, 10, 1], valor = 93  
+   moedas_ordenadas = [50, 20, 10, 1]  
+   Seleções: 50×1 (→43), 20×2 (→3), 10×0, 1×3 (→0)  
+   Troco = {50:1, 20:2, 10:0, 1:3}  
+   Iterações = 1 + 2 + 0 + 3 = 6
+
+Exemplo em Python (sem efeitos externos, apenas referência):
+
+def troco_guloso(moedas, valor):
+    moedas_ordenadas = sorted(moedas, reverse=True)
+    troco = {m: 0 for m in moedas_ordenadas}
+    iteracoes = 0
+    for m in moedas_ordenadas:
+        while valor >= m:
+            valor -= m
+            troco[m] += 1
+            iteracoes += 1
+    return troco, iteracoes
+
+# Testes rápidos
+print(troco_guloso([100,25,10,5,1], 289))  # ({100:2,25:3,10:1,5:0,1:4}, 10)
+print(troco_guloso([50,20,10,1], 93))      # ({50:1,20:2,10:0,1:3}, 6)
